@@ -1,10 +1,6 @@
-import React , { useState } from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import {
-  View,
-  SafeAreaView,
-  Text
-} from 'react-native';
+import { View, SafeAreaView, Text } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { Entypo } from '@expo/vector-icons';
@@ -18,19 +14,12 @@ import {
 import { ToDoList, ToDoActionModal } from '../../components';
 import Utils from '../../utils';
 import { Colors } from '../../constants';
-import styles from './App.styles'
+import styles from './App.styles';
 
 const {
-  Todo: {
-    updateStatus,
-    updateTitle,
-    createTodoItem,
-    deleteCompletedTask
-  },
-  Data: {
-    isEmptyObject
-  }
-} = Utils
+  Todo: { updateStatus, updateTitle, createTodoItem, deleteCompletedTask },
+  Data: { isEmptyObject },
+} = Utils;
 
 /**
  * renderMenu
@@ -38,7 +27,7 @@ const {
  * @returns {React.Component} - renderTitle
  * @private
  */
-const renderMenu = (state) => (
+const renderMenu = state => (
   <Menu>
     <MenuTrigger>
       <Entypo name="menu" size={30} color={Colors.BLACK} />
@@ -52,7 +41,9 @@ const renderMenu = (state) => (
           </View>
         </View>
       </MenuOption>
-      <MenuOption onSelect={() => state.setTodoList(deleteCompletedTask(state.todoList))}>
+      <MenuOption
+        onSelect={() => state.setTodoList(deleteCompletedTask(state.todoList))}
+      >
         <View style={styles.containerMenu}>
           <Entypo name="trash" size={20} color="black" />
           <View style={styles.containerMenuTitle}>
@@ -62,7 +53,7 @@ const renderMenu = (state) => (
       </MenuOption>
     </MenuOptions>
   </Menu>
-)
+);
 
 /**
  * renderTitle
@@ -70,12 +61,12 @@ const renderMenu = (state) => (
  * @returns {React.Component} - renderTitle
  * @private
  */
-const renderTitle = (state) => (
+const renderTitle = state => (
   <View style={styles.containerTitle}>
     <Text style={styles.title}>Todo List</Text>
     {renderMenu(state)}
   </View>
-)
+);
 
 /**
  * onSubmitModal
@@ -83,20 +74,18 @@ const renderTitle = (state) => (
  * @returns {React.Component} - onSubmitModal
  * @private
  */
-const onSubmitModal = (state) => {
-  if (!isEmptyObject(state.editTodoItem)){
-    state.setTodoList(updateTitle(
-      state.todoList,
-      state.editTodoItem,
-      state.newTodoItem
-    ))
+const onSubmitModal = state => {
+  if (!isEmptyObject(state.editTodoItem)) {
+    state.setTodoList(
+      updateTitle(state.todoList, state.editTodoItem, state.newTodoItem),
+    );
   } else {
-    state.setTodoList(createTodoItem(state.todoList, state.newTodoItem))
+    state.setTodoList(createTodoItem(state.todoList, state.newTodoItem));
   }
-  state.setEditTodoItem({})
-  state.setNewTodoItem('')
-  state.setShowModal(false)
-}
+  state.setEditTodoItem({});
+  state.setNewTodoItem('');
+  state.setShowModal(false);
+};
 
 /**
  * renderModal
@@ -104,17 +93,17 @@ const onSubmitModal = (state) => {
  * @returns {React.Component} - ToDoActionModal
  * @private
  */
-const renderModal = (state) => (
+const renderModal = state => (
   <ToDoActionModal
     visible={state.showModal}
     onClose={() => {
-      state.setEditTodoItem({})
-      state.setNewTodoItem('')
-      state.setShowModal(false)
+      state.setEditTodoItem({});
+      state.setNewTodoItem('');
+      state.setShowModal(false);
     }}
     title="Todo Item"
     textInputValue={state.newTodoItem}
-    onChangeTextInput={(value) => state.setNewTodoItem(value)}
+    onChangeTextInput={value => state.setNewTodoItem(value)}
     onSubmit={() => onSubmitModal(state)}
   />
 );
@@ -125,16 +114,16 @@ const renderModal = (state) => (
  * @returns {React.Component} - ToDoList
  * @private
  */
-const renderToDoList = (state) => (
+const renderToDoList = state => (
   <ToDoList
     todoList={state.todoList}
-    onCheck={(toDoItem) => {
-      state.setTodoList(updateStatus(state.todoList, toDoItem))
+    onCheck={toDoItem => {
+      state.setTodoList(updateStatus(state.todoList, toDoItem));
     }}
-    onPressItem={(item) => {
-      state.setNewTodoItem(item.title)
-      state.setShowModal(true)
-      state.setEditTodoItem(item)
+    onPressItem={item => {
+      state.setNewTodoItem(item.title);
+      state.setShowModal(true);
+      state.setEditTodoItem(item);
     }}
   />
 );
@@ -144,16 +133,16 @@ const renderToDoList = (state) => (
  * @returns {Object} - ToDoList
  * @private
  */
-const getState = () => {
-  let [fontsLoaded] = useFonts({
+const _getState = () => {
+  const [fontsLoaded] = useFonts({
     'Roboto-Bold': require('../../assets/fonts/roboto/Roboto-Bold.ttf'),
     'Roboto-Reguler': require('../../assets/fonts/roboto/Roboto-Regular.ttf'),
   });
-  const [todoList, setTodoList] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [showModal, setShowModal] = useState(false)
-  const [newTodoItem, setNewTodoItem] = useState('')
-  const [editTodoItem, setEditTodoItem] = useState({})
+  const [todoList, setTodoList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [newTodoItem, setNewTodoItem] = useState('');
+  const [editTodoItem, setEditTodoItem] = useState({});
 
   return {
     fontsLoaded,
@@ -166,9 +155,9 @@ const getState = () => {
     newTodoItem,
     setNewTodoItem,
     editTodoItem,
-    setEditTodoItem
-  }
-}
+    setEditTodoItem,
+  };
+};
 
 /**
  * App
@@ -176,10 +165,10 @@ const getState = () => {
  * @constructor
  */
 const App = () => {
-  const state = getState();
-  
+  const state = _getState();
+
   if (!state.fontsLoaded) {
-    return <AppLoading />
+    return <AppLoading />;
   }
 
   return (

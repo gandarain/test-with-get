@@ -1,12 +1,11 @@
 const displayName = 'ToDoList';
 const defaultProps = {
   todoList: [],
-  onRefresh: () => {},
   loading: true,
-  onCheck: () => {}
-}
+  onCheck: () => {},
+};
 
 export default {
   displayName,
-  defaultProps
+  defaultProps,
 };

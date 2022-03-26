@@ -1,22 +1,16 @@
-import {
-  Text,
-  View,
-  Modal,
-  TouchableOpacity,
-  TextInput
-} from 'react-native';
+import React from 'react';
+import { Text, View, Modal, TouchableOpacity, TextInput } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 import config from './ToDoActionModal.config';
 import { Colors } from '../../constants';
-import styles from "./ToDoActionModal.styles";
+import styles from './ToDoActionModal.styles';
 
 /**
- * renderTitle
- * @param {() => {}} onClose - onClose
+ * GeneralText
+ * @param {VoidFunction} onClose - onClose
  * @param {string} title - title
- * @returns {React.Node} - renderTitle
- * @private
+ * @returns {React.FC<Props>} - Component
  */
 const renderTitle = (onClose, title) => (
   <View style={styles.containerTitle}>
@@ -30,7 +24,7 @@ const renderTitle = (onClose, title) => (
 /**
  * renderTextInput
  * @param {string} textInputValue - textInputValue
- * @param {() => {}} onChangeTextInput - onChangeTextInput
+ * @param {VoidFunction} onChangeTextInput - onChangeTextInput
  * @returns {React.Node} - renderTextInput
  * @private
  */
@@ -38,7 +32,7 @@ const renderTextInput = (textInputValue, onChangeTextInput) => (
   <View style={styles.containerTextInput}>
     <TextInput
       style={styles.textInput}
-      onChangeText={(value) => onChangeTextInput(value)}
+      onChangeText={value => onChangeTextInput(value)}
       value={textInputValue}
       placeholder="Todo item name"
     />
@@ -48,7 +42,7 @@ const renderTextInput = (textInputValue, onChangeTextInput) => (
 /**
  * renderButtonSubmit
  * @param {string} textInputValue - textInputValue
- * @param {() => {}} onSubmit - onSubmit
+ * @param {VoidFunction} onSubmit - onSubmit
  * @returns {React.Node} - renderButtonSubmit
  * @private
  */
@@ -68,18 +62,18 @@ const renderButtonSubmit = (textInputValue, onSubmit) => (
  * @returns {React.Component} - ToDoActionModal
  * @constructor
  */
-const ToDoActionModal = (props) => {
+const ToDoActionModal = props => {
   const {
     visible,
     onClose,
     title,
     textInputValue,
     onChangeTextInput,
-    onSubmit
+    onSubmit,
   } = props;
 
-	return (
-		<Modal
+  return (
+    <Modal
       animationType="fade"
       transparent={true}
       visible={visible}
@@ -93,7 +87,7 @@ const ToDoActionModal = (props) => {
         </View>
       </View>
     </Modal>
-	);
+  );
 };
 
 ToDoActionModal.displayName = config.displayName;

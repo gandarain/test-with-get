@@ -6,7 +6,7 @@ const styles = {
     paddingVertical: 15,
     borderBottomColor: Colors.GREY,
     borderBottomWidth: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   containerCheckBox: {
     width: 30,
@@ -15,19 +15,19 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    borderColor: Colors.GREY
+    borderColor: Colors.GREY,
   },
   containerTitle: {
     justifyContent: 'center',
-    paddingLeft: 20
+    paddingLeft: 20,
   },
-  title: (status) => ({
+  title: status => ({
     fontSize: 16,
     fontFamily: 'Roboto-Reguler',
     color: Colors.BLACK,
-    textDecorationLine: status ? 'line-through': null,
-    textDecorationStyle: status ? 'solid' : null
-  })
+    textDecorationLine: status ? 'line-through' : null,
+    textDecorationStyle: status ? 'solid' : null,
+  }),
 };
 
 export default styles;

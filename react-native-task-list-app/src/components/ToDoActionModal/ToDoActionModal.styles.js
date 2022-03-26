@@ -4,14 +4,14 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: Colors.TRANSPARENT,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   content: {
     height: '40%',
     backgroundColor: Colors.WHITE,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   containerTitle: {
     flexDirection: 'row',
@@ -20,7 +20,7 @@ const styles = {
     padding: 20,
   },
   title: {
-	  fontSize: 20,
+    fontSize: 20,
     fontFamily: 'Roboto-Bold',
     color: Colors.BLACK,
   },
@@ -29,7 +29,7 @@ const styles = {
     justifyContent: 'center',
     backgroundColor: Colors.BLACK,
     width: '100%',
-    paddingVertical: 20
+    paddingVertical: 20,
   },
   buttonText: {
     fontSize: 20,
@@ -40,11 +40,11 @@ const styles = {
     marginHorizontal: 20,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: Colors.GREY
+    borderColor: Colors.GREY,
   },
   textInput: {
-    padding: 20
-  }
+    padding: 20,
+  },
 };
 
 export default styles;

@@ -1,6 +1,6 @@
 import { FlatList } from 'react-native';
 
-import ToDoItem from "../ToDoItem";
+import ToDoItem from '../ToDoItem';
 import config from './ToDoList.config';
 
 /**
@@ -9,13 +9,9 @@ import config from './ToDoList.config';
  * @returns {React.Component} - ToDoList
  * @constructor
  */
-const ToDoList = (props) => {
-  const {
-    todoList,
-    onCheck,
-    onPressItem
-  } = props;
-  
+const ToDoList = props => {
+  const { todoList, onCheck, onPressItem } = props;
+
   return (
     <FlatList
       showsVerticalScrollIndicator={false}
@@ -30,8 +26,8 @@ const ToDoList = (props) => {
       )}
       keyExtractor={item => item.id}
     />
-  )
-}
+  );
+};
 
 ToDoList.displayName = config.displayName;
 ToDoList.defaultProps = config.defaultProps;
