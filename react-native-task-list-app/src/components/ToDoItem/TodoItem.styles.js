@@ -22,7 +22,7 @@ const styles = {
     paddingLeft: 20
   },
   title: (status) => ({
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: 'Roboto-Reguler',
     color: Colors.BLACK,
     textDecorationLine: status ? 'line-through': null,

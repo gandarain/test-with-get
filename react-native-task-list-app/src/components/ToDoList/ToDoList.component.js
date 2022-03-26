@@ -5,15 +5,15 @@ import config from './ToDoList.config';
 
 /**
  * ToDoList
- * @param {Props} props - Props
+ * @param {Object} props - Props
  * @returns {React.Component} - ToDoList
+ * @constructor
  */
 const ToDoList = (props) => {
   const {
     todoList,
-    onRefresh,
-    loading,
-    onCheck
+    onCheck,
+    onPressItem
   } = props;
   
   return (
@@ -25,11 +25,10 @@ const ToDoList = (props) => {
           title={item.title}
           onCheck={() => onCheck(item)}
           status={item.status}
+          onPressItem={() => onPressItem(item)}
         />
       )}
       keyExtractor={item => item.id}
-      refreshing={loading}
-      onRefresh={onRefresh}
     />
   )
 }

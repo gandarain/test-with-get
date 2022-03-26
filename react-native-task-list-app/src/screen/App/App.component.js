@@ -1,42 +1,105 @@
-import React , { useState, useEffect } from 'react';
+import React , { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  SafeAreaView,
+  Text,
+  TouchableOpacity
+} from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { Entypo } from '@expo/vector-icons';
 
-import { ToDoList } from '../../components';
+import { ToDoList, ToDoActionModal } from '../../components';
 import Utils from '../../utils';
 import { Colors } from '../../constants';
 
 const {
   Todo: {
-    generateTodoList,
-    updateStatus
+    updateStatus,
+    updateTitle,
+    createTodoItem
+  },
+  Data: {
+    isEmptyObject
   }
 } = Utils
 
-const onRefresh = (state) => () => {
-  state.setTodoList([])
-  state.setLoading(true)
-  setTimeout(() => {
-    state.setTodoList(generateTodoList())
-    state.setLoading(false)
-  }, 3000);
-}
+/**
+ * renderTitle
+ * @param {Object} state - state
+ * @returns {React.Component} - renderTitle
+ * @private
+ */
+const renderTitle = (state) => (
+  <View style={styles.containerTitle}>
+    <Text style={styles.title}>Todo List</Text>
+    <TouchableOpacity onPress={() => state.setShowModal(true)}>
+      <Entypo name="menu" size={30} color={Colors.BLACK} />
+    </TouchableOpacity>
+  </View>
+)
 
-const getTodoList = (state) => {
-  state.setLoading(true);
-  state.setTodoList(generateTodoList())
-  state.setLoading(false);
-}
+/**
+ * renderModal
+ * @param {Object} state - state
+ * @returns {React.Component} - ToDoActionModal
+ * @private
+ */
+const renderModal = (state) => (
+  <ToDoActionModal
+    visible={state.showModal}
+    onClose={() => {
+      state.setEditTodoItem({})
+      state.setNewTodoItem('')
+      state.setShowModal(false)
+    }}
+    title="Todo Item"
+    textInputValue={state.newTodoItem}
+    onChangeTextInput={(value) => state.setNewTodoItem(value)}
+    onSubmit={() => {
+      if (!isEmptyObject(state.editTodoItem)){
+        state.setTodoList(updateTitle(
+          state.todoList,
+          state.editTodoItem,
+          state.newTodoItem
+        ))
+      } else {
+        state.setTodoList(createTodoItem(state.todoList, state.newTodoItem))
+      }
+      state.setEditTodoItem({})
+      state.setNewTodoItem('')
+      state.setShowModal(false)
+    }}
+  />
+);
 
-const useGetTodoList = (state) => {
-  useEffect(() => {
-    getTodoList(state)
-  }, []);
-}
+/**
+ * renderToDoList
+ * @param {Object} state - state
+ * @returns {React.Component} - ToDoList
+ * @private
+ */
+const renderToDoList = (state) => (
+  <ToDoList
+    todoList={state.todoList}
+    onCheck={(toDoItem) => {
+      state.setTodoList(updateStatus(state.todoList, toDoItem))
+    }}
+    onPressItem={(item) => {
+      state.setNewTodoItem(item.title)
+      state.setShowModal(true)
+      state.setEditTodoItem(item)
+    }}
+  />
+);
 
+/**
+ * getState
+ * @returns {Object} - ToDoList
+ * @private
+ */
 const getState = () => {
   let [fontsLoaded] = useFonts({
     'Roboto-Bold': require('../../assets/fonts/roboto/Roboto-Bold.ttf'),
@@ -44,30 +107,33 @@ const getState = () => {
   });
   const [todoList, setTodoList] = useState([])
   const [loading, setLoading] = useState(true)
+  const [showModal, setShowModal] = useState(false)
+  const [newTodoItem, setNewTodoItem] = useState('')
+  const [editTodoItem, setEditTodoItem] = useState({})
 
   return {
     fontsLoaded,
     todoList,
     setTodoList,
     loading,
-    setLoading
+    setLoading,
+    showModal,
+    setShowModal,
+    newTodoItem,
+    setNewTodoItem,
+    editTodoItem,
+    setEditTodoItem
   }
 }
 
-const renderTitle = () => (
-  <View style={styles.containerTitle}>
-    <Text style={styles.title}>Todo List</Text>
-    <TouchableOpacity>
-      <Entypo name="menu" size={30} color="black" />
-    </TouchableOpacity>
-  </View>
-)
-
+/**
+ * App
+ * @returns {React.Component} - App
+ * @constructor
+ */
 const App = () => {
   const state = getState();
   
-  useGetTodoList(state);
-
   if (!state.fontsLoaded) {
     return <AppLoading />
   }
@@ -76,16 +142,10 @@ const App = () => {
     <View style={styles.container}>
       <StatusBar style="auto" />
       <SafeAreaView style={styles.content}>
-        {renderTitle()}
-        <ToDoList
-          todoList={state.todoList}
-          onRefresh={onRefresh(state)}
-          loading={state.loading}
-          onCheck={(toDoItem) => {
-            state.setTodoList(updateStatus(state.todoList, toDoItem))
-          }}
-        />
+        {renderTitle(state)}
+        {renderToDoList(state)}
       </SafeAreaView>
+      {renderModal(state)}
     </View>
   );
 }

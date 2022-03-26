@@ -3,6 +3,7 @@ const Colors = {
 	GREY: '#7d7d7d',
 	RED: '#ea3d13',
 	WHITE: '#ffffff',
+	TRANSPARENT: 'rgba(0, 0, 0, 0.5)'
 };
   
 export default Colors;
