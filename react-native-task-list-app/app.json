@@ -1,5 +1,6 @@
 {
   "expo": {
+    "entryPoint": "./src",
     "name": "react-native-task-list-app",
     "slug": "react-native-task-list-app",
     "version": "1.0.0",
