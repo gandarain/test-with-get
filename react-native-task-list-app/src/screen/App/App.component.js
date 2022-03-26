@@ -3,17 +3,9 @@ import { StatusBar } from 'expo-status-bar';
 import { View, SafeAreaView, Text } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
-import { Entypo } from '@expo/vector-icons';
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from 'react-native-popup-menu';
 
-import { ToDoList, ToDoActionModal } from '../../components';
+import { ToDoList, ToDoActionModal, PopUpMenu } from '../../components';
 import Utils from '../../utils';
-import { Colors } from '../../constants';
 import styles from './App.styles';
 
 const {
@@ -22,38 +14,27 @@ const {
 } = Utils;
 
 /**
- * renderMenu
+ * getMenuItem
  * @param {Object} state - state
- * @returns {React.Component} - renderTitle
+ * @returns {Array} - ToDoList
  * @private
  */
-const renderMenu = state => (
-  <Menu>
-    <MenuTrigger>
-      <Entypo name="menu" size={30} color={Colors.BLACK} />
-    </MenuTrigger>
-    <MenuOptions>
-      <MenuOption onSelect={() => state.setShowModal(true)}>
-        <View style={styles.containerMenu}>
-          <Entypo name="pencil" size={20} color="black" />
-          <View style={styles.containerMenuTitle}>
-            <Text styles={styles.menuTitle}>Create new task</Text>
-          </View>
-        </View>
-      </MenuOption>
-      <MenuOption
-        onSelect={() => state.setTodoList(deleteCompletedTask(state.todoList))}
-      >
-        <View style={styles.containerMenu}>
-          <Entypo name="trash" size={20} color="black" />
-          <View style={styles.containerMenuTitle}>
-            <Text styles={styles.menuTitle}>Delete complete task</Text>
-          </View>
-        </View>
-      </MenuOption>
-    </MenuOptions>
-  </Menu>
-);
+const getMenuItem = state => {
+  return [
+    {
+      id: 1,
+      icon: 'pencil',
+      title: 'Create new task',
+      onSelect: () => state.setShowModal(true),
+    },
+    {
+      id: 2,
+      icon: 'trash',
+      title: 'Delete complete task',
+      onSelect: () => state.setTodoList(deleteCompletedTask(state.todoList)),
+    },
+  ];
+};
 
 /**
  * renderTitle
@@ -64,7 +45,7 @@ const renderMenu = state => (
 const renderTitle = state => (
   <View style={styles.containerTitle}>
     <Text style={styles.title}>Todo List</Text>
-    {renderMenu(state)}
+    <PopUpMenu item={getMenuItem(state)} />
   </View>
 );
 
