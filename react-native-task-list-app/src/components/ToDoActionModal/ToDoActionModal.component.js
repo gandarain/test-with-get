@@ -37,6 +37,7 @@ const renderTitle = (onClose, title) => (
 const renderTextInput = (textInputValue, onChangeTextInput) => (
   <View style={styles.containerTextInput}>
     <TextInput
+      style={styles.textInput}
       onChangeText={(value) => onChangeTextInput(value)}
       value={textInputValue}
       placeholder="Todo item name"

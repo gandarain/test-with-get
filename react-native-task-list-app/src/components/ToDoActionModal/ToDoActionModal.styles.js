@@ -38,10 +38,12 @@ const styles = {
   },
   containerTextInput: {
     marginHorizontal: 20,
-    padding: 20,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: Colors.GREY
+  },
+  textInput: {
+    padding: 20
   }
 };
 

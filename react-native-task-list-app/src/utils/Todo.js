@@ -16,7 +16,15 @@ export const createTodoItem = (toDoList, title) => {
   let newState = [...toDoList]
   newState.push({
     id: newState.length + 1,
-    title: title
+    title: title,
+    status: false
   })
+  return newState
+}
+
+export const deleteCompletedTask = (toDoList) => {
+  let newState = [...toDoList]
+  newState = toDoList.filter(item => item.status === false)
+  console.log(newState)
   return newState
 }

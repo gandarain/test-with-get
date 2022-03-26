@@ -1,30 +1,68 @@
 import React , { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
-  StyleSheet,
   View,
   SafeAreaView,
-  Text,
-  TouchableOpacity
+  Text
 } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { Entypo } from '@expo/vector-icons';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 
 import { ToDoList, ToDoActionModal } from '../../components';
 import Utils from '../../utils';
 import { Colors } from '../../constants';
+import styles from './App.styles'
 
 const {
   Todo: {
     updateStatus,
     updateTitle,
-    createTodoItem
+    createTodoItem,
+    deleteCompletedTask
   },
   Data: {
     isEmptyObject
   }
 } = Utils
+
+/**
+ * renderMenu
+ * @param {Object} state - state
+ * @returns {React.Component} - renderTitle
+ * @private
+ */
+const renderMenu = (state) => (
+  <Menu>
+    <MenuTrigger>
+      <Entypo name="menu" size={30} color={Colors.BLACK} />
+    </MenuTrigger>
+    <MenuOptions>
+      <MenuOption onSelect={() => state.setShowModal(true)}>
+        <View style={styles.containerMenu}>
+          <Entypo name="pencil" size={20} color="black" />
+          <View style={styles.containerMenuTitle}>
+            <Text styles={styles.menuTitle}>Create new task</Text>
+          </View>
+        </View>
+      </MenuOption>
+      <MenuOption onSelect={() => state.setTodoList(deleteCompletedTask(state.todoList))}>
+        <View style={styles.containerMenu}>
+          <Entypo name="trash" size={20} color="black" />
+          <View style={styles.containerMenuTitle}>
+            <Text styles={styles.menuTitle}>Delete complete task</Text>
+          </View>
+        </View>
+      </MenuOption>
+    </MenuOptions>
+  </Menu>
+)
 
 /**
  * renderTitle
@@ -35,11 +73,30 @@ const {
 const renderTitle = (state) => (
   <View style={styles.containerTitle}>
     <Text style={styles.title}>Todo List</Text>
-    <TouchableOpacity onPress={() => state.setShowModal(true)}>
-      <Entypo name="menu" size={30} color={Colors.BLACK} />
-    </TouchableOpacity>
+    {renderMenu(state)}
   </View>
 )
+
+/**
+ * onSubmitModal
+ * @param {Object} state - state
+ * @returns {React.Component} - onSubmitModal
+ * @private
+ */
+const onSubmitModal = (state) => {
+  if (!isEmptyObject(state.editTodoItem)){
+    state.setTodoList(updateTitle(
+      state.todoList,
+      state.editTodoItem,
+      state.newTodoItem
+    ))
+  } else {
+    state.setTodoList(createTodoItem(state.todoList, state.newTodoItem))
+  }
+  state.setEditTodoItem({})
+  state.setNewTodoItem('')
+  state.setShowModal(false)
+}
 
 /**
  * renderModal
@@ -58,20 +115,7 @@ const renderModal = (state) => (
     title="Todo Item"
     textInputValue={state.newTodoItem}
     onChangeTextInput={(value) => state.setNewTodoItem(value)}
-    onSubmit={() => {
-      if (!isEmptyObject(state.editTodoItem)){
-        state.setTodoList(updateTitle(
-          state.todoList,
-          state.editTodoItem,
-          state.newTodoItem
-        ))
-      } else {
-        state.setTodoList(createTodoItem(state.todoList, state.newTodoItem))
-      }
-      state.setEditTodoItem({})
-      state.setNewTodoItem('')
-      state.setShowModal(false)
-    }}
+    onSubmit={() => onSubmitModal(state)}
   />
 );
 
@@ -148,27 +192,6 @@ const App = () => {
       {renderModal(state)}
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  content: {
-    flex: 1,
-    margin: 20
-  },
-  containerTitle: {
-    paddingVertical: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  title: {
-    fontSize: 30,
-    fontFamily: 'Roboto-Bold',
-    color: Colors.BLACK
-  }
-});
+};
 
 export default App;
