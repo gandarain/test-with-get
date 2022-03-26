@@ -1,6 +1,8 @@
 const displayName = 'TodoItem';
 const defaultProps = {
-  title: ''
+  title: '',
+  onCheck: () => {},
+  status: false
 }
 
 export default {

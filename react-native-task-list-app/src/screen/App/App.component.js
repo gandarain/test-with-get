@@ -1,56 +1,90 @@
-import React , { useState } from 'react';
+import React , { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { StyleSheet, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import { Entypo } from '@expo/vector-icons';
 
-const renderTodoItem = (title) => (
-  <View style={{ paddingLeft: 20, backgroundColor: 'yellow', paddingVertical: 15, borderBottomColor: 'red', borderBottomWidth: 1, flexDirection: 'row' }}>
-    <View style={{ width: 30, height: 30, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderRadius: 5 }}>
-      <AntDesign name="check" size={24} color="black" />
-    </View>
-    <View style={{ justifyContent: 'center', paddingLeft: 20 }}>
-      <Text style={{ fontSize: 15, fontFamily: 'Roboto-Reguler' }}>{title}</Text>
-    </View>
-  </View>
-)
+import { ToDoList } from '../../components';
+import Utils from '../../utils';
+import { Colors } from '../../constants';
 
-const renderTodoList = (todoList) => (
-  todoList.map((item) => (
-    renderTodoItem(item.title)
-  ))
-)
+const {
+  Todo: {
+    generateTodoList,
+    updateStatus
+  }
+} = Utils
 
-const App = () => {
+const onRefresh = (state) => () => {
+  state.setTodoList([])
+  state.setLoading(true)
+  setTimeout(() => {
+    state.setTodoList(generateTodoList())
+    state.setLoading(false)
+  }, 3000);
+}
+
+const getTodoList = (state) => {
+  state.setLoading(true);
+  state.setTodoList(generateTodoList())
+  state.setLoading(false);
+}
+
+const useGetTodoList = (state) => {
+  useEffect(() => {
+    getTodoList(state)
+  }, []);
+}
+
+const getState = () => {
   let [fontsLoaded] = useFonts({
     'Roboto-Bold': require('../../assets/fonts/roboto/Roboto-Bold.ttf'),
     'Roboto-Reguler': require('../../assets/fonts/roboto/Roboto-Regular.ttf'),
   });
-  const [todoList, setTodoList] = useState([
-    {
-      id: 1,
-      title: 'Get a new light bulb for kitchen'
-    },
-    {
-      id: 2,
-      title: 'Call the doctor'
-    },
-    {
-      id: 3,
-      title: 'Workout'
-    }
-  ])
+  const [todoList, setTodoList] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
+  return {
+    fontsLoaded,
+    todoList,
+    setTodoList,
+    loading,
+    setLoading
+  }
+}
+
+const renderTitle = () => (
+  <View style={styles.containerTitle}>
+    <Text style={styles.title}>Todo List</Text>
+    <TouchableOpacity>
+      <Entypo name="menu" size={30} color="black" />
+    </TouchableOpacity>
+  </View>
+)
+
+const App = () => {
+  const state = getState();
+  
+  useGetTodoList(state);
+
+  if (!state.fontsLoaded) {
+    return <AppLoading />
   }
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <SafeAreaView style={styles.content}>
-        {renderTodoList(todoList)}
+        {renderTitle()}
+        <ToDoList
+          todoList={state.todoList}
+          onRefresh={onRefresh(state)}
+          loading={state.loading}
+          onCheck={(toDoItem) => {
+            state.setTodoList(updateStatus(state.todoList, toDoItem))
+          }}
+        />
       </SafeAreaView>
     </View>
   );
@@ -63,6 +97,17 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     margin: 20
+  },
+  containerTitle: {
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 30,
+    fontFamily: 'Roboto-Bold',
+    color: Colors.BLACK
   }
 });
 

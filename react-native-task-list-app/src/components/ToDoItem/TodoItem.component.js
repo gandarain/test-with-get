@@ -1,7 +1,7 @@
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-import config from './TodoItem.component.config';
+import config from './TodoItem.config';
 import styles from './TodoItem.styles';
 
 /**
@@ -10,15 +10,15 @@ import styles from './TodoItem.styles';
  * @returns {React.Component} - TodoItem
  */
 const TodoItem = (props) => {
-  const { title } = props;
+  const { title, onCheck, status } = props;
   
   return (
     <View style={styles.container}>
-      <View style={styles.containerCheckBox}>
-        <AntDesign name="check" size={24} color="black" />
-      </View>
+      <TouchableOpacity onPress={() => onCheck()} style={styles.containerCheckBox}>
+        {status && <AntDesign name="check" size={24} color="black" />}
+      </TouchableOpacity>
       <View style={styles.containerTitle}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title(status)}>{title}</Text>
       </View>
     </View>
   )

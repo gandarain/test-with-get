@@ -21,11 +21,13 @@ const styles = {
     justifyContent: 'center',
     paddingLeft: 20
   },
-  title: {
+  title: (status) => ({
     fontSize: 15,
     fontFamily: 'Roboto-Reguler',
-    color: Colors.BLACK
-  }
+    color: Colors.BLACK,
+    textDecorationLine: status ? 'line-through': null,
+    textDecorationStyle: status ? 'solid' : null
+  })
 };
 
 export default styles;
