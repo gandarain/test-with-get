@@ -4,21 +4,19 @@ const MOD = 1000000007;
 
 const isPrime = (number) => {
   const num = parseInt(number);
-	
-	for(let i = 2; i * i <= num; i++){
-    if ((num % i) == 0)
-      return false;
+
+  for(let i = 2; i * i <= num; i++){
+    if ((num % i) == 0) return false;
   }
 
-	return num > 1 ? true : false;
+  return num > 1 ? true : false;
 }
-
 const countingPrime = (strNumber, i) => {
   if (i == 0) return 1;
 
-	let count = 0;
-
-	for(let j = 1; j <= 6; j++){
+  let count = 0;
+  
+  for(let j = 1; j <= 6; j++){
     if (i - j >= 0 &&
       strNumber[i - j] != '0' &&
       isPrime(strNumber.substring(i - j, i))
@@ -26,14 +24,14 @@ const countingPrime = (strNumber, i) => {
       count += countingPrime(strNumber, i - j);
       count %= MOD;
     }
-	}
-	
-	return count;
+  }
+  
+  return count;
 }
 
 const countPrimeStrings = (str) => {
   const l = str.length;
-	return countingPrime(str, l);
+  return countingPrime(str, l);
 }
 
 function main() {
