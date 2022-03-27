@@ -16,20 +16,19 @@ const isPrime = (number) => {
 const countingPrime = (strNumber, i) => {
   if (i == 0) return 1;
 
-	let cnt = 0;
+	let count = 0;
 
 	for(let j = 1; j <= 6; j++){
     if (i - j >= 0 &&
       strNumber[i - j] != '0' &&
       isPrime(strNumber.substring(i - j, i))
     ){
-      cnt += countingPrime(strNumber,
-                    i - j);
-      cnt %= MOD;
+      count += countingPrime(strNumber, i - j);
+      count %= MOD;
     }
 	}
 	
-	return cnt;
+	return count;
 }
 
 const countPrimeStrings = (str) => {
